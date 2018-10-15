@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Minesweeper</string>
+    <string name="fieldSizeTitle">Field size: %1$d</string>
+    <string name="bombsCountTitle">Bombs count: %1$d</string>
+    <string name="createButtonTitle">Create</string>
+    <string name="restartButtonTitle">Restart</string>
+    <string name="winButtonTitle">Win</string>
+    <string name="loseButtonTitle">Lose</string>
 </resources>

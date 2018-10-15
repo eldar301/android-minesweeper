@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#0000FF</color>
+    <color name="green">#00FF00</color>
+    <color name="red">#FF0000</color>
+    <color name="purple">#9932CC</color>
+    <color name="black">#000000</color>
+    <color name="maroon">#800000</color>
+    <color name="gray">#5b5b5b</color>
+    <color name="turquoise">#40E0D0</color>
+
+    <array name="colorsForNumberOfBombs">
+        <item>@color/blue</item>
+        <item>@color/green</item>
+        <item>@color/red</item>
+        <item>@color/purple</item>
+        <item>@color/maroon</item>
+        <item>@color/turquoise</item>
+        <item>@color/black</item>
+        <item>@color/gray</item>
+    </array>
+</resources>
