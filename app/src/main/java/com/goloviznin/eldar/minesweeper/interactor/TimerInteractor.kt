@@ -1,4 +1,4 @@
-package com.goloviznin.eldar.minesweeper.scenes.game.interactor
+package com.goloviznin.eldar.minesweeper.interactor
 
 import android.os.Handler
 import java.util.*

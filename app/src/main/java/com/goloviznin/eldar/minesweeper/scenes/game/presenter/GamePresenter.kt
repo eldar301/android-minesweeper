@@ -1,7 +1,9 @@
 package com.goloviznin.eldar.minesweeper.scenes.game.presenter
 
-import com.goloviznin.eldar.minesweeper.scenes.game.interactor.TimerInteractorDefault
-import com.goloviznin.eldar.minesweeper.scenes.game.interactor.TimerInteractorDelegate
+import com.goloviznin.eldar.minesweeper.entity.Record
+import com.goloviznin.eldar.minesweeper.interactor.DatabaseInteractorDefault
+import com.goloviznin.eldar.minesweeper.interactor.TimerInteractorDefault
+import com.goloviznin.eldar.minesweeper.interactor.TimerInteractorDelegate
 import com.goloviznin.eldar.minesweeper.scenes.game.model.Cell
 import com.goloviznin.eldar.minesweeper.scenes.game.model.GameState
 import com.goloviznin.eldar.minesweeper.scenes.game.model.MineSweeper
@@ -24,15 +26,27 @@ interface GamePresenter {
 
 class GamePresenterDefault: GamePresenter, TimerInteractorDelegate {
 
+    private val maxNumberOfRecords = 20
+
     private var game: MineSweeper? = null
 
-    val interactor = TimerInteractorDefault()
+    private var currentGameDuration = 0
+    private var currentGameFieldSize = 0
+    private var currentGameBombsCount = 0
+
+    private val timerInteractor = TimerInteractorDefault()
+
+    private val databaseInteractor = DatabaseInteractorDefault()
 
     override var view: GameView? = null
 
     override fun startNewGame(fieldSize: Int, numberOfBombs: Int) {
-        interactor.delegate = this
-        interactor.startTimer()
+        currentGameDuration = 0
+        currentGameFieldSize = fieldSize
+        currentGameBombsCount = numberOfBombs
+
+        timerInteractor.delegate = this
+        timerInteractor.startTimer()
 
         game = MineSweeper(fieldSize, numberOfBombs)
         view?.gameStarted(game!!.size, game!!.bombsCount, game!!.openedField)
@@ -45,15 +59,36 @@ class GamePresenterDefault: GamePresenter, TimerInteractorDelegate {
             }
 
             when (game.state) {
-                GameState.WIN -> view?.win()
-                GameState.LOSE -> view?.lose()
+                GameState.WIN -> {
+                    view?.win()
+                    timerInteractor.stopTimer()
+                    updateRecord()
+                }
+                GameState.LOSE -> {
+                    view?.lose()
+                    timerInteractor.stopTimer()
+                }
                 GameState.ACTIVE -> return
             }
         }
     }
 
     override fun onTimerUpdate(secondsElapsed: Int) {
-        view?.timerUpdate(secondsElapsed)
+        currentGameDuration = secondsElapsed
+        view?.timerUpdate(currentGameDuration)
+    }
+
+    private fun updateRecord() {
+        val currentProbableRecord = Record(currentGameFieldSize, currentGameBombsCount, currentGameDuration)
+        if (databaseInteractor.count != maxNumberOfRecords) {
+            databaseInteractor.add(currentProbableRecord)
+        } else {
+            val worstRecord = databaseInteractor.fetchRecordWithMaxTime()!!
+            if (currentProbableRecord.time < worstRecord.time) {
+                databaseInteractor.delete(worstRecord)
+                databaseInteractor.add(currentProbableRecord)
+            }
+        }
     }
 
 }

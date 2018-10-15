@@ -54,7 +54,7 @@ class FieldView : View {
     private val splitPaint: Paint by lazy {
         val paint = Paint()
         paint.color = ContextCompat.getColor(context, R.color.gameViewSplitColor)
-        paint.strokeWidth = context.resources.getInteger(R.integer.gameViewSplitLineWidth).toFloat()
+        paint.strokeWidth = context.resources.getInteger(R.integer.gameViewSplitLineWidth).toFloat() * resources.displayMetrics.density
         return@lazy paint
     }
 

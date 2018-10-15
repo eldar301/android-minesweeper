@@ -6,4 +6,8 @@
     <string name="restartButtonTitle">Restart</string>
     <string name="winButtonTitle">Win</string>
     <string name="loseButtonTitle">Lose</string>
+    <string name="recordMenuTitle">Records</string>
+    <string name="recordFieldSizeColumnTitle">Size</string>
+    <string name="recordBombsCountColumnTitle">Bombs</string>
+    <string name="recordTimeColumnTitle">Time</string>
 </resources>

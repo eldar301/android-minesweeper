@@ -5,10 +5,7 @@ import kotlin.collections.HashSet
 import kotlin.math.max
 import kotlin.math.min
 
-class MineSweeper {
-
-    val size: Int
-    val bombsCount: Int
+class MineSweeper(val size: Int, val bombsCount: Int) {
 
     var state = GameState.ACTIVE
         private set
@@ -19,10 +16,7 @@ class MineSweeper {
     var openedField: Array<Cell>
         private set
 
-    constructor(size: Int, bombsCount: Int) {
-        this.size = size
-        this.bombsCount = bombsCount
-
+    init {
         openedField = Array(size * size) { _ -> Cell.Unknown() }
     }
 

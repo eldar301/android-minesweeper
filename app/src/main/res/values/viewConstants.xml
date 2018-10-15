@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="gameViewSplitLineWidth">5</integer>
+    <integer name="gameViewSplitLineWidth">2</integer>
+    <dimen name="recordViewFontSize">25sp</dimen>
 </resources>

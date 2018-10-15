@@ -1,7 +1,10 @@
 package com.goloviznin.eldar.minesweeper.scenes.game.view
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import com.goloviznin.eldar.minesweeper.R
@@ -9,6 +12,7 @@ import com.goloviznin.eldar.minesweeper.scenes.game.model.Cell
 import com.goloviznin.eldar.minesweeper.scenes.game.presenter.GamePresenter
 import com.goloviznin.eldar.minesweeper.scenes.game.presenter.GamePresenterDefault
 import com.goloviznin.eldar.minesweeper.scenes.game.presenter.GameView
+import com.goloviznin.eldar.minesweeper.scenes.rating.view.RatingActivity
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity(), GameViewDelegate, SeekBar.OnSeekBarChangeListener, GameView {
@@ -18,7 +22,7 @@ class GameActivity : AppCompatActivity(), GameViewDelegate, SeekBar.OnSeekBarCha
     private val minBombsCount = 2
     private val fieldSizeToBombsCountRate = 4
 
-    var presenter: GamePresenter? = null
+    private var presenter: GamePresenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +42,18 @@ class GameActivity : AppCompatActivity(), GameViewDelegate, SeekBar.OnSeekBarCha
 
         fieldSizeSeekBar.setOnSeekBarChangeListener(this)
         bombsCountSeekBar.setOnSeekBarChangeListener(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val intent = Intent(baseContext, RatingActivity::class.java)
+        startActivity(intent)
+
+        return true
     }
 
     override fun didTapOnCellWithId(id: Int) {
