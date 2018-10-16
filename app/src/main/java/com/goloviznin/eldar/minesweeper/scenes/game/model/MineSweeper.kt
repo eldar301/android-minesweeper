@@ -25,7 +25,7 @@ class MineSweeper(val size: Int, val bombsCount: Int) {
         val random = Random()
 
         val (openedX, openedY) = indices(openedIndex)
-        var prohibitedIndices = HashSet<Int>(9)
+        val prohibitedIndices = HashSet<Int>(9)
 
         for (xNext in max(openedX - 1, 0) .. min(openedX + 1, size - 1)) {
             for (yNext in max(openedY - 1, 0) .. min(openedY + 1, size - 1)) {
@@ -36,7 +36,7 @@ class MineSweeper(val size: Int, val bombsCount: Int) {
         var numberOfSpawnedBombs = 0
         while (numberOfSpawnedBombs != bombsCount) {
             val randomIndex = random.nextInt(size * size)
-            if (randomIndex != openedIndex && !bombsField[randomIndex] && !prohibitedIndices.contains(randomIndex)) {
+            if (!bombsField[randomIndex] && !prohibitedIndices.contains(randomIndex)) {
                 numberOfSpawnedBombs++
                 bombsField[randomIndex] = true
             }
@@ -49,10 +49,6 @@ class MineSweeper(val size: Int, val bombsCount: Int) {
         val (x, y) = indices(index)
         for (xNext in max(x - 1, 0) .. min(x + 1, size - 1)) {
             for (yNext in max(y - 1, 0) .. min(y + 1, size - 1)) {
-                if (!isWithinBounds(index(xNext, yNext))) {
-                    continue
-                }
-
                 if (bombsField[index(xNext, yNext)]) {
                     counter++
                 }
@@ -104,7 +100,7 @@ class MineSweeper(val size: Int, val bombsCount: Int) {
             for (xNext in max(x - 1, 0) .. min(x + 1, size - 1)) {
                 for (yNext in max(y - 1, 0) .. min(y + 1, size - 1)) {
                     val index = index(xNext, yNext)
-                    if (!isWithinBounds(index) || openedField[index] !is Cell.Unknown) {
+                    if (openedField[index] !is Cell.Unknown) {
                         continue
                     }
 
