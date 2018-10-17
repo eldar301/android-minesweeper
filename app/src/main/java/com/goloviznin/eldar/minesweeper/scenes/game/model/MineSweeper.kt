@@ -93,9 +93,11 @@ class MineSweeper(val size: Int, val bombsCount: Int) {
             return true
         }
 
-        openedField[index] = Cell.Free(countNeighborBombs(index))
+        val neigborsAroundOpenedField = countNeighborBombs(index)
 
-        if (countNeighborBombs(index) == 0) {
+        openedField[index] = Cell.Free(neigborsAroundOpenedField)
+
+        if (neigborsAroundOpenedField == 0) {
             val (x, y) = indices(index)
             for (xNext in max(x - 1, 0) .. min(x + 1, size - 1)) {
                 for (yNext in max(y - 1, 0) .. min(y + 1, size - 1)) {
