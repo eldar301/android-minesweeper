@@ -44,6 +44,18 @@ class GameActivity : AppCompatActivity(), GameViewDelegate, SeekBar.OnSeekBarCha
         bombsCountSeekBar.setOnSeekBarChangeListener(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        presenter?.viewOnResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        presenter?.viewOnPause()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true

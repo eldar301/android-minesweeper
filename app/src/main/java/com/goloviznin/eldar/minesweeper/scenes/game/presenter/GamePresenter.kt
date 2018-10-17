@@ -20,11 +20,14 @@ interface GamePresenter {
 
     var view: GameView?
 
+    fun viewOnResume()
+    fun viewOnPause()
+
     fun startNewGame(fieldSize: Int, numberOfBombs: Int)
     fun open(index: Int)
 }
 
-class GamePresenterDefault: GamePresenter, TimerInteractorDelegate {
+class GamePresenterDefault : GamePresenter, TimerInteractorDelegate {
 
     private val maxNumberOfRecords = 20
 
@@ -40,12 +43,31 @@ class GamePresenterDefault: GamePresenter, TimerInteractorDelegate {
 
     override var view: GameView? = null
 
+    init {
+        timerInteractor.delegate = this
+    }
+
+    override fun viewOnResume() {
+        game?.let {
+            if (it.state == GameState.ACTIVE) {
+                timerInteractor.resumeTimer()
+            }
+        }
+    }
+
+    override fun viewOnPause() {
+        game?.let {
+            if (it.state == GameState.ACTIVE) {
+                timerInteractor.pauseTimer()
+            }
+        }
+    }
+
     override fun startNewGame(fieldSize: Int, numberOfBombs: Int) {
         currentGameDuration = 0
         currentGameFieldSize = fieldSize
         currentGameBombsCount = numberOfBombs
 
-        timerInteractor.delegate = this
         timerInteractor.startTimer()
 
         game = MineSweeper(fieldSize, numberOfBombs)

@@ -1,7 +1,6 @@
 package com.goloviznin.eldar.minesweeper.interactor
 
 import android.os.Handler
-import java.util.*
 
 interface TimerInteractorDelegate {
     fun onTimerUpdate(secondsElapsed: Int)
@@ -12,6 +11,8 @@ interface TimerInteractor {
     var delegate: TimerInteractorDelegate?
 
     fun startTimer()
+    fun pauseTimer()
+    fun resumeTimer()
     fun stopTimer()
 }
 
@@ -21,25 +22,34 @@ class TimerInteractorDefault: TimerInteractor {
 
     override var delegate: TimerInteractorDelegate? = null
 
-    private var startedAt: Long = 0
+    private var secondsElapsed = 0
 
     private var handler = Handler()
 
     private val task = object: Runnable {
         override fun run() {
-            val currentTime = Calendar.getInstance().timeInMillis
-            val secondsElapsed = ((currentTime - startedAt) / 1000).toInt()
+            secondsElapsed++
             delegate?.onTimerUpdate(secondsElapsed)
             handler.postDelayed(this, timerPeriod)
         }
     }
 
     override fun startTimer() {
-        startedAt = Calendar.getInstance().timeInMillis
-        handler.postDelayed(task, 0)
+        stopTimer()
+        delegate?.onTimerUpdate(secondsElapsed)
+        handler.postDelayed(task, timerPeriod)
+    }
+
+    override fun pauseTimer() {
+        handler.removeCallbacks(task)
+    }
+
+    override fun resumeTimer() {
+        handler.postDelayed(task, timerPeriod)
     }
 
     override fun stopTimer() {
+        secondsElapsed = 0
         handler.removeCallbacks(task)
     }
 
